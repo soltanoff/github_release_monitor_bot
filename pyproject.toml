@@ -19,8 +19,8 @@ sqlalchemy = "^2.0.17"
 
 [tool.bandit]
 exclude_dirs = [
-    ".venv",
     "venv",
+    ".venv",
 ]
 
 [tool.flake8]
@@ -41,13 +41,10 @@ max-locals = 20
 
 [tool.pylint."messages control"]
 disable = [
-    "unspecified-encoding",
     "broad-exception-caught",
-    "broad-exception-raised",
-    "expression-not-assigned",
     "missing-module-docstring",
     "missing-class-docstring",
-    "missing-function-docstring"
+    "missing-function-docstring",
 ]
 
 [build-system]
