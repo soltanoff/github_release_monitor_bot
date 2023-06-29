@@ -56,10 +56,10 @@ async def check_last_blockchain_tag(
                 if response.status != HTTPStatus.OK:
                     logging.warning('[%s] Failed to fetch data code=%s: %s', origin_url, response.status, await response.text())
                     return
-                else:
-                    last_tag_info = result[-1]
-                    latest_tag: str = re.findall(GITHUB_TAG_URI_PATTERN, last_tag_info['ref'])[0]
-                    tag_url: str = GITHUB_API_RELEASE_TAG_MASK.format(repo_uri=repo_uri, tag=latest_tag)
+
+                last_tag_info = result[-1]
+                latest_tag: str = re.findall(GITHUB_TAG_URI_PATTERN, last_tag_info['ref'])[0]
+                tag_url: str = GITHUB_API_RELEASE_TAG_MASK.format(repo_uri=repo_uri, tag=latest_tag)
 
         if repository.latest_tag == latest_tag:
             logging.info('[%s] Tag %s exists', origin_url, latest_tag)
