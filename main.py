@@ -81,7 +81,12 @@ async def my_subscriptions(message: types.Message):
         )
 
 
-@special_command_handler(dp, command='subscribe', description='subscribe to the new GitHub repository', skip_empty_messages=True)
+@special_command_handler(
+    dp,
+    command='subscribe',
+    description='[github repo urls] subscribe to the new GitHub repository',
+    skip_empty_messages=True,
+)
 async def subscribe(message: types.Message):
     chat_id: int = message.chat.id
     user_id: str = message.from_user.id
@@ -134,7 +139,12 @@ async def subscribe(message: types.Message):
     await message.reply(answer)
 
 
-@special_command_handler(dp, command='unsubscribe', description='unsubscribe from the GitHub repository', skip_empty_messages=True)
+@special_command_handler(
+    dp,
+    command='unsubscribe',
+    description='[github repo urls] unsubscribe from the GitHub repository',
+    skip_empty_messages=True,
+)
 async def unsubscribe(message: types.Message):
     chat_id: int = message.chat.id
     user_id: str = message.from_user.id

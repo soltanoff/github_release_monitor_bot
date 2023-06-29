@@ -14,9 +14,20 @@ You may try it on telegram - [here](http://t.me/github_release_monitor_bot) :)
 - `/help` - view all commands
 - `/start` - base command for user registration
 - `/my_subscriptions` - view all subscriptions
-- `/subscribe` - subscribe to the new GitHub repository
-- `/unsubscribe` - unsubscribe from the GitHub repository
+- `/subscribe` - \[github repo urls] subscribe to the new GitHub repository
+- `/unsubscribe` - \[github repo urls] unsubscribe from the GitHub repository
 - `/remove_all_subscriptions` - remove all exists subscriptions
+
+<details><summary>Examples here</summary>
+<code>/subscribe https://github.com/sqlalchemy/sqlalchemy</code>
+
+FYI: bot will send you info about updates automatically.
+
+![subscribe_example.jpg](assets%2Fsubscribe_example.jpg)
+
+![fetch_example.jpg](assets%2Ffetch_example.jpg)
+
+</details>
 
 ## Config and environments variable
 
