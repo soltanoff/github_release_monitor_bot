@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "github-release-monitor-bot"
+version = "0.1.0"
+description = "Simple release monitor for github repositories based on telegram bot"
+authors = ["Ilia Soltanov piccadillable@gmail.com"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "github_release_monitor_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^2.25.1"
+flake8 = "^6.0.0"
+flake8-pyproject = "^1.2.3"
+pylint = "^2.17.3"
+safety = "^2.3.5"
+bandit = "^1.7.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
