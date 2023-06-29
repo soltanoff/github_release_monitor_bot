@@ -11,7 +11,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiohttp.web_runner import GracefulExit
 
 from models import async_session, User, Repository, UserRepository
-from monitor import run_release_monitor
+from release_monitor import run_release_monitor
 from utils import (
     special_command_handler,
     COMMAND_LIST,
