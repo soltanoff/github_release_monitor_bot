@@ -5,7 +5,7 @@
 [![Telegram Bot API](https://img.shields.io/badge/Telegram%20Bot%20API-6.7-blue.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
 [![MIT License](https://img.shields.io/pypi/l/aiogram.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-Simple release monitor for github repositories based on telegram bot.
+Simple release monitor for GitHub repositories based on telegram bot.
 
 You may try it on telegram - [here](http://t.me/github_release_monitor_bot) :)
 
@@ -107,3 +107,28 @@ code refactoring.
 ```shell
 pylint $(git ls-files '*.py')
 ```
+
+## My subscriptions
+
+- https://github.com/python/cpython
+- https://github.com/encode/uvicorn
+- https://github.com/ultrajson/ultrajson
+- https://github.com/MagicStack/uvloop
+- https://github.com/python-greenlet/greenlet
+- https://github.com/aiogram/aiogram
+- https://github.com/aio-libs/aiohttp
+- https://github.com/tiangolo/fastapi
+- https://github.com/django/django
+- https://github.com/encode/django-rest-framework
+- https://github.com/redis/redis-py
+- https://github.com/sqlalchemy/sqlalchemy
+- https://github.com/sqlalchemy/alembic
+- https://github.com/pyca/cryptography
+- https://github.com/python-poetry/poetry
+- https://github.com/pytest-dev/pytest
+- https://github.com/nedbat/coveragepy
+- https://github.com/PyCQA/bandit
+- https://github.com/pylint-dev/pylint
+- https://github.com/PyCQA/flake8
+- https://github.com/john-hen/Flake8-pyproject
+- https://github.com/pyupio/safety
