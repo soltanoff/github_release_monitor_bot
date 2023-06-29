@@ -107,6 +107,7 @@ async def subscribe(message: types.Message):
 
         for repository_url in request_message.split():
             if not re.fullmatch(GITHUB_PATTERN, repository_url):
+                logging.warning('Repository skipped by check: %s', repository_url)
                 continue
 
             repository = (await session.scalars(STMT_REPOSITORY.where(Repository.url == repository_url))).one_or_none()
@@ -163,9 +164,10 @@ async def unsubscribe(message: types.Message):
 
         for repository_url in request_message.split():
             if not re.fullmatch(GITHUB_PATTERN, repository_url):
+                logging.warning('Repository skipped by check: %s', repository_url)
                 continue
 
-            repository = (await session.scalars(STMT_REPOSITORY.where(Repository.url == user_id))).one_or_none()
+            repository = (await session.scalars(STMT_REPOSITORY.where(Repository.url == repository_url))).one_or_none()
             if repository is None:
                 logging.info('Repository `%s` doesn\'t exists: skip', repository_url)
                 continue

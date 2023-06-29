@@ -10,9 +10,9 @@ from aiogram import Dispatcher, types
 from models import User, Repository, UserRepository
 
 COMMAND_LIST: List[str] = []
-# Special timeout for prevent to Telegram API timeouts and limits
+# Special timeout to prevent Telegram API timeouts and limits
 SLEEP_AFTER_EXCEPTION = timedelta(minutes=1).seconds
-# Main timing config for prevent to GitHub API limits
+# Main timing config to prevent GitHub API limits
 SURVEY_PERIOD = int(os.getenv('SURVEY_PERIOD') or timedelta(hours=1).seconds)
 FETCHING_STEP_PERIOD = int(os.getenv('FETCHING_STEP_PERIOD') or timedelta(minutes=1).seconds)
 
@@ -20,7 +20,10 @@ FETCHING_STEP_PERIOD = int(os.getenv('FETCHING_STEP_PERIOD') or timedelta(minute
 GITHUB_PATTERN = re.compile(r'^https:\/\/github\.com\/[\w-]+\/[\w-]+$')  # noqa
 # For example: https://api.github.com/repos/algorand/go-algorand/releases/latest
 GITHUB_REPO_URI_PATTERN = re.compile(r'^https:\/\/github\.com\/([\w-]+\/[\w-]+)$')  # noqa
-GITHUB_API_URL_MASK = 'https://api.github.com/repos/{repo_uri}/releases/latest'
+GITHUB_TAG_URI_PATTERN = re.compile(r'refs\/tags\/([\w\d\-\.]+)')  # noqa
+GITHUB_API_RELEASE_URL_MASK = 'https://api.github.com/repos/{repo_uri}/releases/latest'
+GITHUB_API_TAGS_URL_MASK = 'https://api.github.com/repos/{repo_uri}/git/refs/tags'
+GITHUB_API_RELEASE_TAG_MASK = 'https://github.com/{repo_uri}/releases/tag/{tag}'
 
 # Common prebuilt queries
 STMT_USER = sa.select(User)
