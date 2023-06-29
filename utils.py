@@ -17,9 +17,9 @@ SURVEY_PERIOD = int(os.getenv('SURVEY_PERIOD') or timedelta(hours=1).seconds)
 FETCHING_STEP_PERIOD = int(os.getenv('FETCHING_STEP_PERIOD') or timedelta(minutes=1).seconds)
 
 # RegExp pattern for checking user input
-GITHUB_PATTERN = re.compile(r'^https:\/\/github\.com\/\w+\/\w+$')  # noqa
+GITHUB_PATTERN = re.compile(r'^https:\/\/github\.com\/[\w-]+\/[\w-]+$')  # noqa
 # For example: https://api.github.com/repos/algorand/go-algorand/releases/latest
-GITHUB_REPO_URI_PATTERN = re.compile(r'^https:\/\/github\.com\/(\w+\/\w+)$')  # noqa
+GITHUB_REPO_URI_PATTERN = re.compile(r'^https:\/\/github\.com\/([\w-]+\/[\w-]+)$')  # noqa
 GITHUB_API_URL_MASK = 'https://api.github.com/repos/{repo_uri}/releases/latest'
 
 # Common prebuilt queries
