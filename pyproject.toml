@@ -42,6 +42,11 @@ max-line-length = 140
 max-module-lines = 500
 max-locals = 20
 
+[tool.pylint.typecheck]
+ignored-classes = [
+    "ujson",
+]
+
 [tool.pylint."messages control"]
 disable = [
     "broad-exception-caught",
