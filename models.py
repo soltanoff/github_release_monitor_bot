@@ -43,7 +43,7 @@ class Repository(BaseModel, Base):
     __tablename__ = 'repository'
 
     id: Mapped[int] = sa.Column(sa.INT, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    url: Mapped[int] = sa.Column(sa.BIGINT, nullable=False)
+    url: Mapped[str] = sa.Column(sa.VARCHAR(100), nullable=False, unique=True)
     latest_tag: Mapped[str] = sa.Column(sa.VARCHAR(50), nullable=True)
     created_at: Mapped[datetime.datetime] = sa.Column(sa.TIMESTAMP, nullable=False, server_default=STMT_NOW_TIMESTAMP)
     updated_at: Mapped[datetime.datetime] = sa.Column(sa.TIMESTAMP, nullable=False, server_default=STMT_NOW_TIMESTAMP)
