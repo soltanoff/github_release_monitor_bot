@@ -1,11 +1,22 @@
 # GitHub Release Monitor bot
 
 [![\[Telegram\] aiogram live](https://img.shields.io/badge/telegram-aiogram-blue.svg?style=flat-square)](https://t.me/aiogram_live)
-[![Supported python versions](https://img.shields.io/pypi/pyversions/aiogram.svg?style=flat-square)](https://pypi.python.org/pypi/aiogram)
+[![Supported python versions](https://img.shields.io/pypi/pyversions/SQLAlchemy.svg?style=flat-square)](https://pypi.org/project/SQLAlchemy)
 [![Telegram Bot API](https://img.shields.io/badge/Telegram%20Bot%20API-6.7-blue.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
 [![MIT License](https://img.shields.io/pypi/l/aiogram.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 Simple release monitor for github repositories based on telegram bot.
+
+You may try it on telegram - [here](http://t.me/github_release_monitor_bot) :)
+
+## Command list
+
+- `/help` - view all commands
+- `/start` - base command for user registration
+- `/my_subscriptions` - view all subscriptions
+- `/subscribe` - subscribe to the new GitHub repository
+- `/unsubscribe` - unsubscribe from the GitHub repository
+- `/remove_all_subscriptions` - remove all exists subscriptions
 
 ## Config and environments variable
 
@@ -49,7 +60,7 @@ Bandit processes each file, builds an AST from it, and runs appropriate plugins 
 finished scanning all the files it generates a report.
 
 ```shell
-bandit -r .
+bandit -c pyproject.toml -r .
 ```
 
 ### Safety tool
