@@ -5,6 +5,8 @@
 [![Telegram Bot API](https://img.shields.io/badge/Telegram%20Bot%20API-6.5-blue.svg?style=flat-square&logo=telegram)](https://core.telegram.org/bots/api)
 [![MIT License](https://img.shields.io/pypi/l/aiogram.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
+Simple release monitor for github repositories based on telegram bot.
+
 ## Config and environments variable
 
 Config based on `.env` creation or set env-variables as you like (example: [.env.default](.env.default))
