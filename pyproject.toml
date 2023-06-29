@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "github-release-monitor-bot"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simple release monitor for github repositories based on telegram bot"
 authors = ["Ilia Soltanov piccadillable@gmail.com"]
 license = "MIT"
