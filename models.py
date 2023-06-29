@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import Mapped, relationship, declarative_base, sessionmaker
 
-STMT_NOW_TIMESTAMP = sa.sql.func.now()
+STMT_NOW_TIMESTAMP = sa.sql.func.now()  # pylint: disable=not-callable
 DB_NAME = 'db.sqlite3'
 
 engine_lite = create_async_engine(f'sqlite+aiosqlite:///{DB_NAME}')
@@ -17,7 +17,7 @@ async_session = sessionmaker(  # noqa
     autocommit=False,
     expire_on_commit=False
 )
-Base = declarative_base()
+Base = declarative_base()  # Yes, without alembic
 
 
 class BaseModel:
