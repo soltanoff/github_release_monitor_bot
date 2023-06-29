@@ -10,5 +10,7 @@ services:
       - TELEGRAM_API_KEY=$TELEGRAM_API_KEY
       - SURVEY_PERIOD=$SURVEY_PERIOD
       - FETCHING_STEP_PERIOD=$FETCHING_STEP_PERIOD
+    env_file:
+      - .env
     volumes:
       - .env.default:/app/.env
