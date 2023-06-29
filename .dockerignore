@@ -1,0 +1,18 @@
+.idea
+.git
+.ci
+.venv
+.dockerignore
+.editorconfig
+.env
+.gitignore
+api.token
+conf.ini
+default.conf.ini
+docker-compose.yml
+requirements.txt
+requirements-dev.txt
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
