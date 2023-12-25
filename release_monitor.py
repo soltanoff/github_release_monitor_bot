@@ -8,10 +8,10 @@ from typing import List, Optional, Tuple
 
 import aiohttp
 import ujson
-from aiogram import Bot
 from aiogram.enums import ParseMode
 from aiohttp.web_runner import GracefulExit
 
+from bot_controller import BotController
 from models import Repository, UserRepository, async_session
 from utils import (
     FETCHING_STEP_PERIOD,
@@ -73,17 +73,17 @@ async def update_repository_latest_tag(repository: Repository, latest_tag: str):
         logging.info('[%s] New tag %s', repository.id, latest_tag)
 
 
-async def send_tag_update_to_all_subscribers(bot: Bot, repository: Repository, tag_url: str):
+async def send_tag_update_to_all_subscribers(bot_controller: BotController, repository: Repository, tag_url: str):
     answer = f'<b>Release tag</b>: {tag_url}'
     async with async_session() as db_session:
         for user in await db_session.scalars(STMT_USER_WITH_REPOSITORIES.where(UserRepository.repository_id == repository.id)):
-            await bot.send_message(user.external_id, answer, parse_mode=ParseMode.HTML)
+            await bot_controller.send_message(user.external_id, answer, parse_mode=ParseMode.HTML)
             logging.info('[%s] Sending to %s', repository.id, user.external_id)
 
 
 async def check_last_repository_tag(
     http_session: aiohttp.ClientSession,
-    bot: Bot,
+    bot_controller: BotController,
     repository: Repository,
 ):
     repo_uri = re.findall(GITHUB_REPO_URI_PATTERN, repository.url)[0]
@@ -97,28 +97,28 @@ async def check_last_repository_tag(
         return
 
     await update_repository_latest_tag(repository, latest_tag)
-    await send_tag_update_to_all_subscribers(bot, repository, tag_url)
+    await send_tag_update_to_all_subscribers(bot_controller, repository, tag_url)
 
 
-async def data_collector(bot: Bot):
+async def data_collector(bot_controller: BotController):
     async with async_session() as db_session:
         all_repositories = (await db_session.scalars(STMT_REPOSITORY)).all()
 
     async with aiohttp.ClientSession() as http_session:
         for repository in all_repositories:
             try:
-                await check_last_repository_tag(http_session, bot, repository)
+                await check_last_repository_tag(http_session, bot_controller, repository)
             except Exception as ex:
                 logging.exception('[%s] Unexpected exception: %r', repository.id, ex, exc_info=ex)
             finally:
                 await asyncio.sleep(FETCHING_STEP_PERIOD)
 
 
-async def run_release_monitor(bot: Bot):
+async def run_release_monitor(bot_controller: BotController):
     while True:
         logging.info('Run data collector')
         try:
-            await data_collector(bot)
+            await data_collector(bot_controller)
         except (GracefulExit, KeyboardInterrupt, CancelledError):
             logging.info('Close release monitor...')
             return

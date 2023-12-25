@@ -2,19 +2,13 @@ import logging
 import os
 import re
 from datetime import timedelta
-from functools import wraps
-from typing import Callable, List
 
 import sqlalchemy as sa
-from aiogram import Dispatcher, types
-from aiogram.filters import Command
+from aiogram import types
 
 from models import Repository, User, UserRepository, async_session
 
 
-COMMAND_LIST: List[str] = []
-# Special timeout to prevent Telegram API timeouts and limits
-SLEEP_AFTER_EXCEPTION = timedelta(minutes=1).seconds
 # Main timing config to prevent GitHub API limits
 SURVEY_PERIOD = int(os.getenv('SURVEY_PERIOD') or timedelta(hours=1).seconds)
 FETCHING_STEP_PERIOD = int(os.getenv('FETCHING_STEP_PERIOD') or timedelta(minutes=1).seconds)
@@ -34,41 +28,6 @@ STMT_REPOSITORY = sa.select(Repository)
 STMT_USER_REPOSITORY = sa.select(UserRepository)
 STMT_USER_SUBSCRIPTION = sa.select(Repository).join(UserRepository)
 STMT_USER_WITH_REPOSITORIES = sa.select(User).join(UserRepository)
-
-
-def special_command_handler(
-    dispatcher: Dispatcher,
-    command: str,
-    description: str,
-    skip_empty_messages: bool = False,
-    disable_web_page_preview: bool = False,
-) -> Callable:
-    def decorator(callback: Callable) -> Callable:
-        @wraps(callback)
-        async def wrapper(message: types.Message) -> None:
-            await message.bot.send_chat_action(message.chat.id, 'typing')
-
-            if skip_empty_messages:
-                request_message: str = message.text[len(command) + 1:].strip()
-                if not request_message:
-                    await message.reply('Empty message?')
-                    return
-
-            log_bot_incomming_message(message)
-            user = await get_or_create_user(message)
-            answer = await callback(message, user)
-            log_bot_outgoing_message(message, answer)
-
-            await message.reply(
-                text=answer,
-                disable_web_page_preview=disable_web_page_preview,
-            )
-
-        dispatcher.message(Command(command))(wrapper)
-        COMMAND_LIST.append(f'/{command} - {description}')
-        return callback
-
-    return decorator
 
 
 async def get_or_create_user(message: types.Message) -> User:
