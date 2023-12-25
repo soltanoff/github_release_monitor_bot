@@ -4,7 +4,8 @@ from typing import Any
 import sqlalchemy as sa
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import Mapped, relationship, declarative_base, sessionmaker
+from sqlalchemy.orm import Mapped, declarative_base, relationship, sessionmaker
+
 
 STMT_NOW_TIMESTAMP = sa.sql.func.now()  # pylint: disable=not-callable
 DB_NAME = 'db.sqlite3'
