@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 from datetime import timedelta
@@ -6,8 +7,10 @@ from typing import Callable, List
 
 import sqlalchemy as sa
 from aiogram import Dispatcher, types
+from aiogram.filters import Command
 
-from models import User, Repository, UserRepository
+from models import Repository, User, UserRepository
+
 
 COMMAND_LIST: List[str] = []
 # Special timeout to prevent Telegram API timeouts and limits
@@ -30,7 +33,6 @@ STMT_USER = sa.select(User)
 STMT_REPOSITORY = sa.select(Repository)
 STMT_USER_REPOSITORY = sa.select(UserRepository)
 STMT_USER_SUBSCRIPTION = sa.select(Repository).join(UserRepository)
-STMT_REPOSITORY_ID = sa.select(Repository.id).join(UserRepository)
 STMT_USER_WITH_REPOSITORIES = sa.select(User).join(UserRepository)
 
 
@@ -39,20 +41,50 @@ def special_command_handler(
     command: str,
     description: str,
     skip_empty_messages: bool = False,
+    disable_web_page_preview: bool = False,
 ) -> Callable:
     def decorator(callback: Callable) -> Callable:
         @wraps(callback)
         async def wrapper(message: types.Message) -> None:
+            await message.bot.send_chat_action(message.chat.id, 'typing')
+
             if skip_empty_messages:
                 request_message: str = message.text[len(command) + 1:].strip()
                 if not request_message:
                     await message.reply('Empty message?')
                     return
 
-            await callback(message)
+            log_bot_incomming_message(message)
+            answer = await callback(message)
+            log_bot_outgoing_message(message, answer)
 
-        dispatcher.message_handler(commands=[command])(wrapper)
+            await message.reply(
+                text=answer,
+                disable_web_page_preview=disable_web_page_preview,
+            )
+
+        dispatcher.message(Command(command))(wrapper)
         COMMAND_LIST.append(f'/{command} - {description}')
         return callback
 
     return decorator
+
+
+def log_bot_incomming_message(message: types.Message):
+    logging.info(
+        'User[%s|%s:@%s]: %r',
+        message.chat.id,
+        message.from_user.id,
+        message.from_user.username,
+        message.text,
+    )
+
+
+def log_bot_outgoing_message(message: types.Message, answer: str):
+    logging.info(
+        '<<< User[%s|%s:@%s]: %r',
+        message.chat.id,
+        message.from_user.id,
+        message.from_user.username,
+        answer,
+    )
