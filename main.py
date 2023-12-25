@@ -13,7 +13,6 @@ from utils import (
     COMMAND_LIST,
     GITHUB_PATTERN,
     STMT_REPOSITORY,
-    STMT_USER,
     STMT_USER_REPOSITORY,
     STMT_USER_SUBSCRIPTION,
     special_command_handler,
@@ -25,27 +24,13 @@ dp = Dispatcher()
 
 @special_command_handler(dp, command='start', description='base command for user registration')
 @special_command_handler(dp, command='help', description='view all commands')
-async def send_welcome(message: types.Message) -> str:
-    async with async_session() as session:
-        user_id = message.from_user.id
-        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
-        if user is None:
-            user = User()
-            user.external_id = user_id
-            session.add(user)
-            await session.commit()
-
+async def send_welcome(_: types.Message, __: User) -> str:
     return '\n'.join(COMMAND_LIST)
 
 
 @special_command_handler(dp, command='my_subscriptions', description='view all subscriptions', disable_web_page_preview=True)
-async def my_subscriptions(message: types.Message) -> str:
+async def my_subscriptions(_: types.Message, user: User) -> str:
     async with async_session() as session:
-        user_id = message.from_user.id
-        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
-        if user is None:
-            return 'You were not subscribed before'
-
         answer = ''
         repositories = await session.scalars(STMT_USER_SUBSCRIPTION.where(UserRepository.user_id == user.id))
         for repository in repositories:
@@ -60,17 +45,8 @@ async def my_subscriptions(message: types.Message) -> str:
     description='[github repo urls] subscribe to the new GitHub repository',
     skip_empty_messages=True,
 )
-async def subscribe(message: types.Message) -> str:
+async def subscribe(message: types.Message, user: User) -> str:
     async with async_session() as session:
-        user_id = message.from_user.id
-        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
-        if user is None:
-            user = User()
-            user.external_id = user_id
-            session.add(user)
-            await session.flush()
-            logging.info('User %s doesn\'t exists: create new user', user_id)
-
         for repository_url in message.text.split():
             if not re.fullmatch(GITHUB_PATTERN, repository_url):
                 logging.warning('Repository skipped by check: %s', repository_url)
@@ -97,7 +73,7 @@ async def subscribe(message: types.Message) -> str:
                 user_repository.user = user
                 user_repository.repository = repository
                 session.add(user_repository)
-                logging.info('Subscribe user %s to %s', user_id, repository_url)
+                logging.info('Subscribe user %s to %s', user.id, repository_url)
 
         await session.commit()
 
@@ -110,15 +86,8 @@ async def subscribe(message: types.Message) -> str:
     description='[github repo urls] unsubscribe from the GitHub repository',
     skip_empty_messages=True,
 )
-async def unsubscribe(message: types.Message):
+async def unsubscribe(message: types.Message, user: User) -> str:
     async with async_session() as session:
-        user_id = message.from_user.id
-        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
-        if user is None:
-            logging.info('User %s doesn\'t exists: skip', user_id)
-            await message.reply('You were not subscribed before')
-            return
-
         for repository_url in message.text.split():
             if not re.fullmatch(GITHUB_PATTERN, repository_url):
                 logging.warning('Repository skipped by check: %s', repository_url)
@@ -139,7 +108,7 @@ async def unsubscribe(message: types.Message):
             ).one_or_none()
             if user_repository:
                 await session.delete(user_repository)
-                logging.info('Unsubscribe user %s from %s', user_id, repository_url)
+                logging.info('Unsubscribe user %s from %s', user.id, repository_url)
 
         await session.commit()
 
@@ -147,20 +116,13 @@ async def unsubscribe(message: types.Message):
 
 
 @special_command_handler(dp, command='remove_all_subscriptions', description='remove all exists subscriptions')
-async def remove_all_subscriptions(message: types.Message) -> str:
+async def remove_all_subscriptions(_: types.Message, user: User) -> str:
     async with async_session() as session:
-        user_id = message.from_user.id
-        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
-        if user is None:
-            logging.info('User[%s|%s:@%s] doesn\'t exists: skip', user_id)
-            return 'You were not subscribed before'
-
         user_repositories = await session.scalars(STMT_USER_REPOSITORY.where(UserRepository.user_id == user.id))
         for user_repository in user_repositories:
             await session.delete(user_repository)
 
-        logging.info('Full unsubscribe for user %s', user_id)
-
+        logging.info('Full unsubscribe for user %s', user.id)
         await session.commit()
 
     return 'Successfully unsubscribed!'
@@ -169,6 +131,7 @@ async def remove_all_subscriptions(message: types.Message) -> str:
 async def main():
     bot = Bot(token=os.getenv('TELEGRAM_API_KEY'))
     asyncio.create_task(run_release_monitor(bot))
+
     try:
         await dp.start_polling(bot)
     except Exception as error:

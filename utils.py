@@ -9,7 +9,7 @@ import sqlalchemy as sa
 from aiogram import Dispatcher, types
 from aiogram.filters import Command
 
-from models import Repository, User, UserRepository
+from models import Repository, User, UserRepository, async_session
 
 
 COMMAND_LIST: List[str] = []
@@ -55,7 +55,8 @@ def special_command_handler(
                     return
 
             log_bot_incomming_message(message)
-            answer = await callback(message)
+            user = await get_or_create_user(message)
+            answer = await callback(message, user)
             log_bot_outgoing_message(message, answer)
 
             await message.reply(
@@ -68,6 +69,19 @@ def special_command_handler(
         return callback
 
     return decorator
+
+
+async def get_or_create_user(message: types.Message) -> User:
+    async with async_session() as session:
+        user_id = message.from_user.id
+        user = (await session.scalars(STMT_USER.where(User.external_id == user_id))).one_or_none()
+        if user is None:
+            user = User()
+            user.external_id = user_id
+            await session.merge(user)
+            await session.commit()
+
+        return user
 
 
 def log_bot_incomming_message(message: types.Message):
