@@ -38,6 +38,7 @@ exclude = [
 [tool.pylint.design]
 min-public-methods = 0
 max-public-methods = 50
+max-args = 6
 
 [tool.pylint.format]
 max-line-length = 140
