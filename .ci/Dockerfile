@@ -1,11 +1,15 @@
 FROM python:3.12-slim
 ENV PYTHONUNBUFFERED 0
 
+ENV buildDeps=' \
+        build-essential \
+        musl-dev \
+        gcc \
+    '
+
 RUN apt-get update \
-    && pip install --upgrade --no-cache-dir pip \
-    && pip install --upgrade --no-cache-dir wheel \
-    && pip install --upgrade --no-cache-dir setuptools \
-    && pip install --upgrade --no-cache-dir poetry
+    && apt-get install -y $buildDeps --no-install-recommends \
+    && pip install --upgrade --no-cache-dir pip wheel setuptools poetry
 
 WORKDIR /app
 
@@ -16,6 +20,6 @@ COPY pyproject.toml /app/
 RUN poetry config virtualenvs.create false \
     && poetry install --no-root --no-interaction
 
-COPY .. /app
+COPY app /app
 
 CMD [ "python", "main.py" ]
