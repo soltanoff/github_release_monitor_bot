@@ -25,7 +25,7 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools poetry
           poetry config virtualenvs.create false
           poetry install --no-root --no-interaction
-  flake8:
+  lint:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [ build ]
@@ -38,21 +38,7 @@ jobs:
         id: cache-virtualenv
       - name: Analysing the code with flake8
         run: |
-          python -m flake8 .
-  pylint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [ build ]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.12'
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-      - name: Analysing the code with pylint
-        run: |
-          python -m pylint $(git ls-files '*.py')
+          make lint
   safety:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -66,18 +52,4 @@ jobs:
         id: cache-virtualenv
       - name: Analysing the dependencies with safety
         run: |
-          python -m safety check
-  bandit:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [ build ]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.12'
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-      - name: Analysing the common security issues in Python code
-        run: |
-          python -m bandit -c pyproject.toml -r .
+          make safety
