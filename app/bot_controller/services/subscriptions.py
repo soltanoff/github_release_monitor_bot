@@ -47,11 +47,12 @@ async def my_subscriptions(message: types.Message, session: AsyncSession, user: 
 )
 async def subscribe(message: types.Message, session: AsyncSession, user: User) -> str:
     for repository_url in message.text.split():
-        if not re.fullmatch(settings.GITHUB_PATTERN, repository_url):
+        matches = re.findall(settings.GITHUB_PATTERN, repository_url)
+        if not matches:
             logging.warning("Repository skipped by check: %s", repository_url)
             continue
 
-        await db_helper.make_subscription(session, user, repository_url)
+        await db_helper.make_subscription(session, user, repository_url, short_name=matches[0])
 
     await session.commit()
     return "Successfully subscribed!"

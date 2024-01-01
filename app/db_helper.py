@@ -23,7 +23,7 @@ async def get_or_create_user(session: AsyncSession, message: types.Message) -> U
         user.external_id = user_id
         await session.merge(user)
         await session.commit()
-        logging.info("[%s] New user %s", user.id, user.external_id)
+        logging.info("[%s] New user added", user.external_id)
 
     return user
 
@@ -33,14 +33,15 @@ async def update_repository_latest_tag(session: AsyncSession, repository: Reposi
     repository.latest_tag = latest_tag
     await session.merge(repository)
     await session.commit()
-    logging.info("[%s] New tag %s", repository.id, latest_tag)
+    logging.info("[%s] New tag %s", repository.short_name, latest_tag)
 
 
-async def make_subscription(session: AsyncSession, user: User, repository_url: str) -> None:
+async def make_subscription(session: AsyncSession, user: User, repository_url: str, short_name: str) -> None:
     repository = (await session.scalars(STMT_REPOSITORY.where(Repository.url == repository_url))).one_or_none()
     if repository is None:
         repository = Repository()
         repository.url = repository_url
+        repository.short_name = short_name
         session.add(repository)
         await session.flush()
         logging.info(
@@ -61,7 +62,7 @@ async def make_subscription(session: AsyncSession, user: User, repository_url: s
         user_repository.user = user
         user_repository.repository = repository
         session.add(user_repository)
-        logging.info("Subscribe user %s to %s", user.id, repository_url)
+        logging.info("Subscribe user %s to %s", user.external_id, repository_url)
 
 
 async def make_unsubscription(session: AsyncSession, user: User, repository_url: str) -> None:
@@ -80,7 +81,7 @@ async def make_unsubscription(session: AsyncSession, user: User, repository_url:
     ).one_or_none()
     if user_repository:
         await session.delete(user_repository)
-        logging.info("Unsubscribe user %s from %s", user.id, repository_url)
+        logging.info("Unsubscribe user %s from %s", user.external_id, repository_url)
 
 
 async def remove_all_subscriptions(session: AsyncSession, user: User) -> None:
@@ -88,4 +89,4 @@ async def remove_all_subscriptions(session: AsyncSession, user: User) -> None:
     for user_repository in user_repositories:
         await session.delete(user_repository)
 
-    logging.info("Full unsubscribe for user %s", user.id)
+    logging.info("Full unsubscribe for user %s", user.external_id)
