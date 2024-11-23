@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "github-release-monitor-bot"
-version = "0.1.6"
+version = "0.1.7"
 description = "Simple release monitor for github repositories based on telegram bot"
 authors = ["Ilia Soltanov <piccadillable@gmail.com>"]
 license = "MIT"
@@ -8,32 +8,32 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiogram = "^3.10.0"
-sqlalchemy = "^2.0.31"
-greenlet = "^3.0.3"
+aiogram = "^3.15.0"
+sqlalchemy = "^2.0.36"
+greenlet = "^3.1.1"
 aiosqlite = "^0.20.0"
 ujson = "^5.10.0"
 
 [tool.poetry.group.dev.dependencies]
-black = { version = ">=24.4.2", allow-prereleases = true }
+black = { version = ">=24.10.0", allow-prereleases = true }
 isort = "^5.13.2"
 #mypy = "^1.8.0"
-flake8 = "^7.1.0"
+flake8 = "^7.1.1"
 flake8-pyproject = "^1.2.3"
 flake8-bandit = "^4.1.1"
 flake8-broken-line = "^1.0.0"
-flake8-comprehensions = "^3.15.0"
+flake8-comprehensions = "^3.16.0"
 flake8-debugger = "^4.1.2"
 flake8-docstrings = "^1.7.0"
 flake8-eradicate = "^1.5.0"
 flake8-isort = "^6.1.1"
 flake8-quotes = "^3.4.0"
 flake8-string-format = "^0.3.0"
-flake8-bugbear = "^24.4.26"
+flake8-bugbear = "^24.10.31"
 flake8-rst-docstrings = "^0.3.0"
-pylint = "^3.2.5"
-safety = "^3.2.4"
-bandit = "^1.7.9"
+pylint = "^3.3.1"
+safety = "^3.2.11"
+bandit = "^1.7.10"
 
 [tool.bandit]
 exclude_dirs = [
