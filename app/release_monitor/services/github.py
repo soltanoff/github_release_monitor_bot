@@ -5,7 +5,7 @@ from operator import itemgetter
 from typing import List, Optional, Tuple
 
 import aiohttp
-import ujson
+import orjson
 
 
 GITHUB_TAG_URI_PATTERN = re.compile(r"refs\/tags\/([\w\d\-\.]+)")  # noqa
@@ -21,7 +21,7 @@ async def get_latest_tag_from_release_uri(http_session: aiohttp.ClientSession, r
     api_url = GITHUB_API_RELEASE_URL_MASK.format(repo_uri=repo_uri)
     async with http_session.get(api_url) as response:
         logging.info("Fetching data from %s", api_url)
-        result: dict = await response.json(loads=ujson.loads)
+        result: dict = await response.json(loads=orjson.loads)
         if response.status != HTTPStatus.OK:
             logging.warning(
                 "[%s] Failed to fetch data code=%s: %s",
@@ -44,7 +44,7 @@ async def get_latest_tag_from_tag_uri(http_session: aiohttp.ClientSession, repo_
     api_url = GITHUB_API_TAGS_URL_MASK.format(repo_uri=repo_uri)
     async with http_session.get(api_url) as response:
         logging.info("Fetching data from %s", api_url)
-        result: List = await response.json(loads=ujson.loads)
+        result: List = await response.json(loads=orjson.loads)
         if response.status != HTTPStatus.OK:
             logging.warning(
                 "[%s] Failed to fetch data code=%s: %s",
