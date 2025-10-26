@@ -74,19 +74,13 @@ finished scanning all the files it generates a report.
 bandit -c pyproject.toml -r .
 ```
 
-### Safety tool
+### pip-audit
 
-[safety](https://pyup.io/safety/) is a tool designed to check installed dependencies for known security vulnerabilities.
+[pip-audit](https://github.com/pypa/pip-audit) is a tool designed to check installed dependencies for known security
+vulnerabilities.
 
 ```shell
-# how to check all installed packages
-safety check --policy-file .safety-policy.yml
-
-# how to check all dependencies
-safety check -r requirements_dev.txt --policy-file .safety-policy.yml
-
-# json report 
-mkdir -p reports/safety && safety check -r requirements_dev.txt --policy-file .safety-policy.yml --json --output reports/safety/result.json
+pip-audit
 ```
 
 ### flake8
