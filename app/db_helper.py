@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import Repository, User, UserRepository
 
-
 # Common prebuilt queries
 STMT_USER = sa.select(User)
 STMT_REPOSITORY = sa.select(Repository)

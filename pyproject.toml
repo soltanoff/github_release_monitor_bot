@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "github-release-monitor-bot"
-version = "0.2.0"
+version = "0.3.0"
 description = "Simple release monitor for github repositories based on telegram bot"
 authors = ["Ilia Soltanov <piccadillable@gmail.com>"]
 license = "MIT"
@@ -8,15 +8,21 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.13"
-aiogram = "^3.22.0"
+python = ">=3.13,<3.15"
+aiogram = "^3.24.0"
 sqlalchemy = "^2.0.46"
-greenlet = "^3.3.0"
+greenlet = "^3.3.1"
 aiosqlite = "^0.22.1"
 orjson = "^3.11.5"
+urllib3 = "^2.6.3"
+aiohttp = "^3.13.3"
+filelock = "^3.20.3"
+jaraco-context = "^6.1.0"
+virtualenv = "^20.36.1"
+h11 = "^0.16.0"
 
 [tool.poetry.group.dev.dependencies]
-black = { version = ">=25.9.0", allow-prereleases = true }
+black = { version = ">=26.1.0", allow-prereleases = true }
 isort = "^7.0.0"
 #mypy = "^1.8.0"
 flake8 = "^7.3.0"
@@ -98,7 +104,6 @@ line_length = 140
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 multi_line_output = 3
 src_paths = "./app"
-lines_after_imports = 2
 
 [tool.pylint.typecheck]
 ignored-classes = [

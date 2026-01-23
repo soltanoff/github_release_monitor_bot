@@ -2,7 +2,6 @@ import os
 import re
 from datetime import timedelta
 
-
 DB_NAME = "db.sqlite3"
 # Main timing config to prevent GitHub API limits
 SURVEY_PERIOD = int(os.getenv("SURVEY_PERIOD") or timedelta(hours=1).seconds)

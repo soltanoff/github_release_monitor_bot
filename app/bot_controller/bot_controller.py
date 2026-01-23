@@ -34,7 +34,10 @@ class BotController:
             logging.info("Bot graceful shutdown...")
 
     async def send_message(self, user_external_id: int, answer: str, parse_mode=ParseMode.HTML):
-        await self._bot.send_message(user_external_id, answer, parse_mode=parse_mode)
+        try:
+            await self._bot.send_message(user_external_id, answer, parse_mode=parse_mode)
+        except Exception as error:
+            logging.exception("Unexpected error: %r", error, exc_info=error)
 
     def _register_middlewares(self):
         for middleware in self.MIDDLEWARES:
