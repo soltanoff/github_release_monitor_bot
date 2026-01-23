@@ -2,7 +2,7 @@
 
 docker_compose_path = "docker-compose.yml"
 
-DC = docker-compose -f $(docker_compose_path)
+DC = docker compose -f $(docker_compose_path)
 
 
 format: # format your code according to project linter tools
