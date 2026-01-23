@@ -10,7 +10,6 @@ from bot_controller.router import Router
 from db_helper import STMT_USER_SUBSCRIPTION
 from models import User, UserRepository
 
-
 router = Router(name=__name__)
 
 

@@ -7,7 +7,6 @@ from typing import List, Optional, Tuple
 import aiohttp
 import orjson
 
-
 GITHUB_TAG_URI_PATTERN = re.compile(r"refs\/tags\/([\w\d\-\.]+)")  # noqa
 GITHUB_API_RELEASE_URL_MASK = "https://api.github.com/repos/{repo_uri}/releases/latest"
 GITHUB_API_TAGS_URL_MASK = "https://api.github.com/repos/{repo_uri}/git/refs/tags"

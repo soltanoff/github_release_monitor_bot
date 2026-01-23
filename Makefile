@@ -18,8 +18,7 @@ lint:
 	#PYTHONPATH=./app poetry run mypy --namespace-packages --show-error-codes app --check-untyped-defs --ignore-missing-imports --show-traceback
 
 deps-audit:
-	@# Ignore GHSA-vqfr-h8mv-ghfj, we're not using h11
-	poetry run pip-audit --ignore-vuln GHSA-vqfr-h8mv-ghfj
+	poetry run pip-audit
 
 app-up: # Up the project using docker-compose
 	$(DC) up -d --build

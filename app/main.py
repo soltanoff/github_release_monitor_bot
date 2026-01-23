@@ -8,8 +8,12 @@ from release_monitor import run_release_monitor
 
 async def main() -> None:
     bot_controller = BotController(os.getenv("TELEGRAM_API_KEY"))
-    asyncio.create_task(run_release_monitor(bot_controller))
-    await bot_controller.start()
+    task = asyncio.create_task(run_release_monitor(bot_controller))
+
+    try:
+        await bot_controller.start()
+    finally:
+        task.cancel()
 
 
 if __name__ == "__main__":
